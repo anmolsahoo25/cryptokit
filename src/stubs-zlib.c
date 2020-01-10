@@ -48,11 +48,11 @@ static void caml_zlib_error(char * fn, value vzs)
     s1 = copy_string(fn);
     s2 = copy_string(msg);
     tuple = alloc_small(2, 0);
-    Field(tuple, 0) = s1;
-    Field(tuple, 1) = s2;
+    Store_field(tuple, 0, s1);
+    Store_field(tuple, 1, s2);
     bucket = alloc_small(2, 0);
-    Field(bucket, 0) = *caml_zlib_error_exn;
-    Field(bucket, 1) = tuple;
+    Store_field(bucket, 0, *caml_zlib_error_exn);
+    Store_field(bucket, 1, tuple);
   End_roots();
   mlraise(bucket);
 }
@@ -118,9 +118,9 @@ value caml_zlib_deflate(value vzs, value srcbuf, value srcpos, value srclen,
   zs->next_in = NULL;         /* not required, but cleaner */
   zs->next_out = NULL;        /* (avoid dangling pointers into Caml heap) */
   res = alloc_small(3, 0);
-  Field(res, 0) = Val_bool(retcode == Z_STREAM_END);
-  Field(res, 1) = Val_int(used_in);
-  Field(res, 2) = Val_int(used_out);
+  Store_field(res, 0, Val_bool(retcode == Z_STREAM_END));
+  Store_field(res, 1, Val_int(used_in));
+  Store_field(res, 2, Val_int(used_out));
   return res;
 }
 
@@ -164,9 +164,9 @@ value caml_zlib_inflate(value vzs, value srcbuf, value srcpos, value srclen,
   zs->next_in = NULL;           /* not required, but cleaner */
   zs->next_out = NULL;          /* (avoid dangling pointers into Caml heap) */
   res = alloc_small(3, 0);
-  Field(res, 0) = Val_bool(retcode == Z_STREAM_END);
-  Field(res, 1) = Val_int(used_in);
-  Field(res, 2) = Val_int(used_out);
+  Store_field(res, 0, Val_bool(retcode == Z_STREAM_END));
+  Store_field(res, 1, Val_int(used_in));
+  Store_field(res, 2, Val_int(used_out));
   return res;
 }
 
@@ -189,8 +189,8 @@ static void caml_zlib_not_supported(void)
       invalid_argument("Exception Cryptokit.Error not initialized");
   }
   bucket = alloc_small(2, 0);
-  Field(bucket, 0) = *caml_zlib_error_exn;
-  Field(bucket, 1) = Val_int(12); /* Compression_not_supported */
+  Store_field(bucket, 0, *caml_zlib_error_exn);
+  Store_field(bucket, 1, Val_int(12)); /* Compression_not_supported */
   mlraise(bucket);
 }
 
